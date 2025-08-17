@@ -18,8 +18,8 @@ Person PersonFactory::createPerson()
 
 int PersonFactory::generateRandomId()
 {
-    static long contador = 1000000000; // Inicia en 1,000,000,000
-    return contador++;
+    static long counter = 1'000'000'000;
+    return counter++;
 }
 
 string PersonFactory::generateRandomName()
