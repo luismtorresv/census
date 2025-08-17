@@ -3,7 +3,7 @@
 using namespace std;
 using namespace std::chrono;
 
-Person::Person(string name, year_month_day birthDate, string currentCity, int id, int assets, int debt, bool isTaxFiler)
+Person::Person(int id, std::string name, std::chrono::year_month_day birthDate, std::string currentCity, int assets, int debt, bool isTaxFiler)
 {
     this->name = name;
     this->birthDate = birthDate;
