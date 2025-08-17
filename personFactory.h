@@ -25,6 +25,8 @@ public:
 
     std::string generateRandomCity();
 
+    int generateRandomNumber(int min, int max);
+
     int generateRandomAssets();
 
     int generateRandomDebt();
