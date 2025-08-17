@@ -3,37 +3,23 @@
 #include "person.hpp"
 #include <random>
 
-enum taxCalendarGroup
-{
-    groupA,
-    groupB,
-    groupC
-};
+enum taxCalendarGroup { groupA, groupB, groupC };
 
-class PersonFactory
-{
+class PersonFactory {
 public:
-    Person createPerson();
+  Person createPerson();
+  std::vector<Person> generatePersonVector();
 
-    std::vector<Person> generatePersonVector();
+  int generateRandomId();
+  std::string generateRandomName();
+  std::chrono::year_month_day generateRandomBirthDate();
+  std::string generateRandomCity();
+  int generateRandomNumber(int min, int max);
+  int generateRandomAssets();
+  int generateRandomDebt();
+  bool generateRandomBoolean();
 
-    int generateRandomId();
-
-    std::string generateRandomName();
-
-    std::chrono::year_month_day generateRandomBirthDate();
-
-    std::string generateRandomCity();
-
-    int generateRandomNumber(int min, int max);
-
-    int generateRandomAssets();
-
-    int generateRandomDebt();
-
-    bool generateRandomBoolean();
-
-    taxCalendarGroup determineTaxCalendarGroup(Person);
+  taxCalendarGroup determineTaxCalendarGroup(Person);
 };
 
 #endif

@@ -1,26 +1,26 @@
 #ifndef PERSON_INCLUDE
 #define PERSON_INCLUDE
-#include <string>
 #include <chrono>
+#include <string>
 
-class Person
-{
+class Person {
 
 public:
-    // Personal information
-    std::string name;
-    std::chrono::year_month_day birthDate;
-    std::string currentCity;
-    int id;
+  // Personal information
+  std::string name;
+  std::chrono::year_month_day birthDate;
+  std::string currentCity;
+  int id;
 
-    // Tax data
-    int assets;      // Total value
-    int debt;        // Due payments
-    bool isTaxFiler; // Declares if the person declares rent.
-    // enum taxCalendarGroup;
+  // Tax data
+  int assets;      // Total value
+  int debt;        // Due payments
+  bool isTaxFiler; // Declares if the person declares rent.
+  // enum taxCalendarGroup;
 
-    Person(int id, std::string name, std::chrono::year_month_day birthDate, std::string currentCity, int assets, int debt, bool isTaxFiler);
-    int getAge();
+  Person(int id, std::string name, std::chrono::year_month_day birthDate,
+         std::string currentCity, int assets, int debt, bool isTaxFiler);
+  int getAge();
 };
 
 #endif

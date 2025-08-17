@@ -70,7 +70,7 @@ memcheck: $(BUILD_DIR)/memcheck.out
 
 .PHONY: format
 format:
-	clang-format -i `find . -depth  -name '*.cpp' -o -name '*.h'`
+	clang-format -i `find . -depth  -name '*.cpp' -o -name '*.hpp'`
 
 
 .PHONY: clean
