@@ -1,5 +1,5 @@
-#ifndef PERSONFACTORY_INCLUDE
-#define PERSONFACTORY_INCLUDE
+#pragma once
+
 #include "person.hpp"
 #include <random>
 
@@ -21,5 +21,3 @@ public:
 
   taxCalendarGroup determineTaxCalendarGroup(int id);
 };
-
-#endif

@@ -1,5 +1,5 @@
-#ifndef PERSON_INCLUDE
-#define PERSON_INCLUDE
+#pragma once
+
 #include <chrono>
 #include <string>
 
@@ -22,5 +22,3 @@ public:
          std::string currentCity, int assets, int debt, bool isTaxFiler);
   int getAge();
 };
-
-#endif

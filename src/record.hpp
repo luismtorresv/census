@@ -1,5 +1,4 @@
-#ifndef RECORD_HPP
-#define RECORD_HPP
+#pragma once
 
 #include <chrono>
 #include <cstdint>
@@ -25,5 +24,3 @@ public:
   std::int64_t timeInMilliseconds() const noexcept;
   std::int64_t memoryInKiloBytes() const noexcept;
 };
-
-#endif
