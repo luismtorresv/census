@@ -5,6 +5,15 @@ using namespace std::chrono;
 
 Person PersonFactory::createPerson()
 {
+    int id = generateRandomId();
+    string name = generateRandomName();
+    year_month_day birthDate = generateRandomBirthDate();
+    string city = generateRandomCity();
+    int assets = generateRandomAssets();
+    int debt = generateRandomDebt();
+    bool isTaxFiler = generateRandomBoolean();
+
+    return Person{id, name, birthDate, city, assets, debt, isTaxFiler};
 }
 
 int PersonFactory::generateRandomId()
