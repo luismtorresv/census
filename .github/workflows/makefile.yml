@@ -1,0 +1,12 @@
+name: Compile C++ project
+
+on: [push]
+
+jobs:
+ build:
+   runs-on: ubuntu-latest
+   steps:
+   - name: checkout repo
+     uses: actions/checkout@main
+   - name: Compile project
+     run: make
