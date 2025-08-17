@@ -8,7 +8,7 @@ enum taxCalendarGroup { groupA, groupB, groupC };
 class PersonFactory {
 public:
   Person createPerson();
-  std::vector<Person> generatePersonVector();
+  std::vector<Person> generatePersonVector(int n);
 
   int generateRandomId();
   std::string generateRandomName();

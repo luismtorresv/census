@@ -3,7 +3,18 @@
 using namespace std;
 using namespace std::chrono;
 
-Person PersonFactory::createPerson() {
+vector<Person> PersonFactory::generatePersonVector(int n){
+  vector<Person> personArray;
+  personArray.reserve(n); //Not only does this reserve a set memory space, it also prevents the array from seeking a default constructors
+
+  for (int i = 0; i<n;i++){
+    personArray.push_back(createPerson());
+  }
+
+  return personArray;
+}
+
+Person PersonFactory::createPerson(){
   int id = generateRandomId();
   string name = generateRandomName();
   year_month_day birthDate = generateRandomBirthDate();
