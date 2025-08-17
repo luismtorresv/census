@@ -3,18 +3,20 @@
 using namespace std;
 using namespace std::chrono;
 
-vector<Person> PersonFactory::generatePersonVector(int n){
+vector<Person> PersonFactory::generatePersonVector(int n) {
   vector<Person> personArray;
-  personArray.reserve(n); //Not only does this reserve a set memory space, it also prevents the array from seeking a default constructors
+  personArray.reserve(
+      n); // Not only does this reserve a set memory space, it also prevents the
+          // array from seeking a default constructors
 
-  for (int i = 0; i<n;i++){
+  for (int i = 0; i < n; i++) {
     personArray.push_back(createPerson());
   }
 
   return personArray;
 }
 
-Person PersonFactory::createPerson(){
+Person PersonFactory::createPerson() {
   int id = generateRandomId();
   string name = generateRandomName();
   year_month_day birthDate = generateRandomBirthDate();
@@ -98,4 +100,20 @@ bool PersonFactory::generateRandomBoolean() {
   int random_val = generateRandomNumber(0, 1);
 
   return (random_val == 0) ? true : false;
+}
+
+taxCalendarGroup PersonFactory::determineTaxCalendarGroup(int id) {
+  int lastTwoDigits = id % 100;
+  taxCalendarGroup group;
+
+  // We will assume that the number shall always be positive.
+  if (lastTwoDigits <= 39) {
+    group = groupA;
+  } else if (lastTwoDigits <= 79) {
+    group = groupB;
+  } else {
+    group = groupC;
+  }
+
+  return group;
 }

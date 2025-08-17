@@ -19,7 +19,7 @@ public:
   int generateRandomDebt();
   bool generateRandomBoolean();
 
-  taxCalendarGroup determineTaxCalendarGroup(Person);
+  taxCalendarGroup determineTaxCalendarGroup(int id);
 };
 
 #endif
