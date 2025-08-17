@@ -1,5 +1,7 @@
 #ifndef PERSON_INCLUDE
 #define PERSON_INCLUDE
+#include <string>
+#include <chrono>
 
 class Person
 {

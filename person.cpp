@@ -1,6 +1,3 @@
-#include <iostream>
-#include <string>
-#include <chrono>
 #include "person.h"
 
 using namespace std;
