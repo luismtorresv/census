@@ -37,8 +37,8 @@ string PersonFactory::generateRandomName()
 
 year_month_day PersonFactory::generateRandomBirthDate()
 {
-    int rand_day = generateRandomNumber(1, 31);
-    int rand_month = generateRandomNumber(1, 12);
+    unsigned int rand_day = generateRandomNumber(1, 31);
+    unsigned int rand_month = generateRandomNumber(1, 12);
     int rand_year = generateRandomNumber(1925, 2025);
 
     return year{rand_year} / month{rand_month} / day{rand_day}; // this is the expected expression.
