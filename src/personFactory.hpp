@@ -1,6 +1,6 @@
 #ifndef PERSONFACTORY_INCLUDE
 #define PERSONFACTORY_INCLUDE
-#include "person.h"
+#include "person.hpp"
 #include <random>
 
 enum taxCalendarGroup
