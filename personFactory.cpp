@@ -4,7 +4,6 @@ using namespace std;
 
 Person PersonFactory::createPerson()
 {
-    int id = generateRandomId();
 }
 
 int PersonFactory::generateRandomId()
@@ -33,10 +32,10 @@ string PersonFactory::generateRandomName()
     mt19937 generator(random_device{}());
 
     uniform_int_distribution<size_t> names_distribution(0, names.size() - 1);       // equal chance to get a random name
-    uniform_int_distribution<size_t> surnames_distribution(0, suranmes.size() - 1); // equal chance to get a random surname
+    uniform_int_distribution<size_t> surnames_distribution(0, surnames.size() - 1); // equal chance to get a random surname
 
-    random_name_pos = names_distribution(generator);
-    random_surname_pos = surnames_distribution(generator);
+    int random_name_pos = names_distribution(generator);
+    int random_surname_pos = surnames_distribution(generator);
 
-    return names[random_name_pos] + surnames[random_surname_pos]
+    return names[random_name_pos] + surnames[random_surname_pos];
 }

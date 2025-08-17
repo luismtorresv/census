@@ -8,32 +8,30 @@ enum taxCalendarGroup
     groupA,
     groupB,
     groupC
-}
+};
 
 class PersonFactory
 {
 public:
-    Person createPerson() {}
+    Person createPerson();
 
-    Person[] generatePersonVector() {}
+    std::vector<Person> generatePersonVector();
 
-    int generateRandomId() {}
+    int generateRandomId();
 
-    std::string generateRandomName() {}
+    std::string generateRandomName();
 
-    std::chrono::year_month_day generateRandomBirthDate() {}
+    std::chrono::year_month_day generateRandomBirthDate();
 
-    std::string generateRandomCity() {}
+    std::string generateRandomCity();
 
-    int generateRandomAssets() {}
+    int generateRandomAssets();
 
-    int generateRandomDebt() {}
+    int generateRandomDebt();
 
-    bool generateRandomBoolan {}
+    bool generateRandomBoolean();
 
-    enum determineTaxCalendarGroup(Person)
-    {
-    }
-}
+    taxCalendarGroup determineTaxCalendarGroup(Person);
+};
 
 #endif
