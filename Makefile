@@ -1,7 +1,8 @@
 # Template adapted from that of Job Vranish
 # (https://spin.atomicobject.com/2016/08/26/makefile-c-projects/)
 
-TARGET_EXEC := census
+TARGET_EXEC_NAME := census
+TARGET_EXEC_PATH  = $(BUILD_DIR)/$(TARGET_EXEC_NAME)
 
 BUILD_DIR := ./build
 SRC_DIRS  := ./src
@@ -44,13 +45,13 @@ ASANFLAGS += -fno-omit-frame-pointer
 
 
 .PHONY: clean
-all: $(TARGET_EXEC)
+all: $(TARGET_EXEC_PATH)
 
-run: $(TARGET_EXEC)
+run: $(TARGET_EXEC_PATH)
 	@./$<
 
 # The final build step.
-$(TARGET_EXEC): $(OBJS)
+$(TARGET_EXEC_PATH): $(OBJS)
 	$(CXX) $(OBJS) -o $@ $(LDFLAGS)
 
 # Build step for C++ source
