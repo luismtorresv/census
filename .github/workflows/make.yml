@@ -9,4 +9,4 @@ jobs:
    - name: checkout repo
      uses: actions/checkout@main
    - name: Compile project
-     run: make
+     run: make struct -j && make class -j
