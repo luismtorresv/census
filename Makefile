@@ -12,11 +12,12 @@ SRCS := $(shell find $(SRC_DIRS) -name '*.cpp')
 
 # Prepends BUILD_DIR and appends .o to every src file
 # As an example, ./your_dir/hello.c turns into ./build/./your_dir/hello.c.o
-OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
+OBJS_CLASS  := $(SRCS:%=$(BUILD_DIR)/class/%.o)
+OBJS_STRUCT := $(SRCS:%=$(BUILD_DIR)/struct/%.o)
 
 # String substitution (suffix version without %).
 # As an example, ./build/hello.c.o turns into ./build/hello.c.d
-DEPS := $(OBJS:.o=.d)
+DEPS := $(OBJS_CLASS:.o=.d) $(OBJS_STRUCT:.o=.d)
 
 # Every folder in ./src will need to be passed to GCXX so that it can find header files
 INC_DIRS := src
@@ -44,20 +45,35 @@ ASANFLAGS += -fno-common
 ASANFLAGS += -fno-omit-frame-pointer
 
 
-.PHONY: clean
-all: $(TARGET_EXEC_PATH)
 
-run: $(TARGET_EXEC_PATH)
-	@./$<
+all: help
 
-# The final build step.
-$(TARGET_EXEC_PATH): $(OBJS)
-	$(CXX) $(OBJS) -o $@ $(LDFLAGS)
+.PHONY: help
+help:
+	@echo "make class or make struct"
+
+# Final build step with classes.
+class: $(TARGET_EXEC_PATH)-class
+	@$(TARGET_EXEC_PATH)-class
+
+# Final build step with structs.
+struct: $(TARGET_EXEC_PATH)-struct
+	@$(TARGET_EXEC_PATH)-struct
+
+$(TARGET_EXEC_PATH)-class: $(OBJS_CLASS)
+	$(CXX) $^ -o $@
+
+$(TARGET_EXEC_PATH)-struct: $(OBJS_STRUCT)
+	$(CXX) $^ -o $@
 
 # Build step for C++ source
-$(BUILD_DIR)/%.cpp.o: %.cpp
+$(BUILD_DIR)/class/%.cpp.o: %.cpp
 	$(MKDIR_P) $(dir $@)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/struct/%.cpp.o: %.cpp
+	$(MKDIR_P) $(dir $@)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -DPERSON_AS_STRUCT -c $< -o $@
 
 # Memory check
 $(BUILD_DIR)/memcheck.out: $(OBJS)
@@ -72,7 +88,6 @@ memcheck: $(BUILD_DIR)/memcheck.out
 .PHONY: format
 format:
 	clang-format -i `find . -depth  -name '*.cpp' -o -name '*.hpp'`
-
 
 .PHONY: clean
 clean:
