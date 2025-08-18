@@ -11,6 +11,7 @@ public:
   std::chrono::year_month_day birthDate;
   std::string currentCity;
   int id;
+  int age;
 
   // Tax data
   int assets;      // Total value

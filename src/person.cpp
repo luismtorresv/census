@@ -12,6 +12,7 @@ Person::Person(int id, std::string name, std::chrono::year_month_day birthDate,
   this->assets = assets;
   this->debt = debt;
   this->isTaxFiler = isTaxFiler;
+  this->age = getAge();
 }
 
 int Person::getAge() {

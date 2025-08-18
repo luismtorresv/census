@@ -7,6 +7,8 @@ enum taxCalendarGroup { groupA, groupB, groupC };
 
 class PersonFactory {
 public:
+  const static std::vector<std::string> colombianCities;
+
   Person createPerson();
   std::vector<Person> generatePersonVector(int n);
 
