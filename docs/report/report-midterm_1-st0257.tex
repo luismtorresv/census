@@ -1,0 +1,32 @@
+% !BIB TS-program = biber
+
+\documentclass[11pt,letterpaper,oneside]{article}
+
+\input{preamble/setup}
+
+\begin{document}
+
+\input{preamble/title}
+
+% ------------------------------
+% Contents
+\tableofcontents
+
+% Only print list of figures if we have included any.
+\iftotalfigures
+    \listoffigures
+\fi
+
+\listoftables
+
+\clearpage
+
+% ------------------------------
+% Main sections (as required)
+%
+
+% ------------------------------
+% Bibliography
+\printbibliography
+
+\end{document}
