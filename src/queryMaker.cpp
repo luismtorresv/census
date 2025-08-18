@@ -2,13 +2,6 @@
 
 using namespace std;
 
-const static std::vector<std::string> colombianCities = {
-    "Bogotá",      "Medellín",   "Cali",        "Barranquilla",  "Cartagena",
-    "Bucaramanga", "Pereira",    "Santa Marta", "Cúcuta",        "Ibagué",
-    "Manizales",   "Pasto",      "Neiva",       "Villavicencio", "Armenia",
-    "Sincelejo",   "Valledupar", "Montería",    "Popayán",       "Tunja",
-};
-
 Person QueryMaker::findOldestPersonCountryWide(vector<Person> personArray) {
 
   // get size
@@ -29,20 +22,12 @@ Person QueryMaker::findOldestPersonCountryWide(vector<Person> personArray) {
 std::map<string, Person>
 QueryMaker::findOldestPersonPerCity(vector<Person> personArray) {
   std::map<string, Person> oldestPersonPerCity;
+  for (const auto &person : personArray) {
+    auto it = oldestPersonPerCity.find(person.currentCity);
 
-  for (string city : colombianCities) {
-    vector<Person> personsInCity;
-
-    // Filters the personArray and pushes back only the people who beling to the
-    // inputted city
-    for (Person person : personArray) {
-      if (person.currentCity == city) {
-        personsInCity.push_back(person);
-      }
+    if (it == oldestPersonPerCity.end() || person.assets > it->second.assets) {
+      oldestPersonPerCity.insert_or_assign(person.currentCity, person);
     }
-
-    oldestPersonPerCity.emplace(city,
-                                findOldestPersonCountryWide(personsInCity));
   }
 
   return oldestPersonPerCity;
@@ -67,23 +52,17 @@ QueryMaker::findHighestAssetsPersonCountryWide(vector<Person> personArray) {
 }
 
 std::map<string, Person>
-QueryMaker::findHighestAssetsPersonPerCity(vector<Person> personArray) {
-  std::map<string, Person> HighestAssetPerCity;
+QueryMaker::findHighestAssetsPersonPerCity(std::vector<Person> personArray) {
+  std::map<string, Person> highestAssetPersonPerCity;
 
-  for (string city : colombianCities) {
-    vector<Person> personsInCity;
+  for (const auto &person : personArray) {
+    auto it = highestAssetPersonPerCity.find(person.currentCity);
 
-    // Filters the personArray and pushes back only the people who beling to the
-    // inputted city
-    for (Person person : personArray) {
-      if (person.currentCity == city) {
-        personsInCity.push_back(person);
-      }
+    if (it == highestAssetPersonPerCity.end() ||
+        person.assets > it->second.assets) {
+      highestAssetPersonPerCity.insert_or_assign(person.currentCity, person);
     }
-
-    HighestAssetPerCity.emplace(
-        city, findHighestAssetsPersonCountryWide(personsInCity));
   }
 
-  return HighestAssetPerCity;
+  return highestAssetPersonPerCity;
 }

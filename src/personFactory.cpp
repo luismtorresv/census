@@ -3,13 +3,6 @@
 using namespace std;
 using namespace std::chrono;
 
-const static std::vector<std::string> colombianCities = {
-    "Bogotá",      "Medellín",   "Cali",        "Barranquilla",  "Cartagena",
-    "Bucaramanga", "Pereira",    "Santa Marta", "Cúcuta",        "Ibagué",
-    "Manizales",   "Pasto",      "Neiva",       "Villavicencio", "Armenia",
-    "Sincelejo",   "Valledupar", "Montería",    "Popayán",       "Tunja",
-};
-
 vector<Person> PersonFactory::generatePersonVector(int n) {
   vector<Person> personArray;
   personArray.reserve(
@@ -76,8 +69,14 @@ year_month_day PersonFactory::generateRandomBirthDate() {
 };
 
 string PersonFactory::generateRandomCity() {
-  // Generate a random number to input as position for vector 'colombianCities'.
+  const static std::vector<std::string> colombianCities = {
+      "Bogotá",      "Medellín",   "Cali",        "Barranquilla",  "Cartagena",
+      "Bucaramanga", "Pereira",    "Santa Marta", "Cúcuta",        "Ibagué",
+      "Manizales",   "Pasto",      "Neiva",       "Villavicencio", "Armenia",
+      "Sincelejo",   "Valledupar", "Montería",    "Popayán",       "Tunja",
+  };
 
+  // Generate a random number to input as position for vector 'colombianCities'.
   int random_cities_pos = generateRandomNumber(0, colombianCities.size());
 
   return colombianCities[random_cities_pos];
