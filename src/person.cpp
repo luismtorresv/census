@@ -15,7 +15,7 @@ Person::Person(int id, std::string name, std::chrono::year_month_day birthDate,
   this->age = getAge();
 }
 
-int Person::getAge() {
+int Person::getAge() const {
   year yearOfBirth = this->birthDate.year();
 
   // system_clock returns a time_point, which must be turned into a year by

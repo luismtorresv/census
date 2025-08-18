@@ -21,5 +21,5 @@ public:
 
   Person(int id, std::string name, std::chrono::year_month_day birthDate,
          std::string currentCity, int assets, int debt, bool isTaxFiler);
-  int getAge();
+  int getAge() const;
 };

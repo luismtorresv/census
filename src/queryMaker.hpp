@@ -1,7 +1,13 @@
 #pragma once
 #include "person.hpp"
 #include "personFactory.hpp"
+#include <algorithm>
+#include <cmath>
 #include <map>
+#include <numeric>
+#include <unordered_map>
+#include <utility>
+#include <vector>
 
 class QueryMaker {
 
@@ -19,12 +25,18 @@ public:
       std::vector<Person>
           personArray); // I don't know what this function returns yet.
 
-  std::vector<std::string>
-  findCitiesWithHighestAverageAssets(std::vector<Person> personArray);
-  void calculatePercentageOfPeopleOlderThan80PerTaxCalendarGroup(
-      std::vector<Person> personArray); // I don't know
-                                        // what this
-                                        // function
-                                        // returns yet.
-  int countPeoplePerCity(std::vector<Person> personArray);
+  // Additional queries:
+  // Return vector of pairs (city, average_assets) sorted desc by average.
+  // topK indicates how many top cities to return (default 5). If topK == 0 ->
+  // return all.
+  std::vector<std::pair<std::string, double>>
+  findCitiesWithHighestAverageAssets(const std::vector<Person> &personArray,
+                                     bool usePassByReference = true,
+                                     std::size_t topK = 5);
+  std::map<taxCalendarGroup, double>
+  calculatePercentageOfPeopleOlderThan80PerTaxCalendarGroup(
+      const std::vector<Person> &personArray, bool usePassByReference = true);
+  std::map<std::string, int>
+  countPeoplePerCity(const std::vector<Person> &personArray,
+                     bool usePassByReference = true);
 };
