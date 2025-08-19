@@ -2,30 +2,44 @@
 
 using namespace std;
 
-Person QueryMaker::findOldestPersonCountryWide(vector<Person> &personArray) {
+Person QueryMaker::findOldestPersonCountryWide(std::vector<Person> &personArray,
+                                               bool usePassByReference) {
+  std::vector<Person> localCopy;
+  const std::vector<Person> *dataPtr = &personArray;
+  if (!usePassByReference) {
+    localCopy = personArray;
+    dataPtr = &localCopy;
+  }
+  const std::vector<Person> &data = *dataPtr;
 
-  // get size
-  int n = personArray.size();
-
-  Person oldestPerson = personArray[0];
+  int n = data.size();
+  Person oldestPerson = data[0];
 
   for (int i = 1; i < n; i++) {
-    if (personArray[i].age > oldestPerson.age) {
-      oldestPerson = personArray[i]; // Update max if current person's age is
-                                     // greater than the current one.
+    if (data[i].age > oldestPerson.age) {
+      oldestPerson = data[i];
     }
   }
 
   return oldestPerson;
 }
 
-std::map<string, Person>
-QueryMaker::findOldestPersonPerCity(vector<Person> &personArray) {
-  std::map<string, Person> oldestPersonPerCity;
-  for (const auto &person : personArray) {
+std::map<std::string, Person>
+QueryMaker::findOldestPersonPerCity(std::vector<Person> &personArray,
+                                    bool usePassByReference) {
+  std::vector<Person> localCopy;
+  const std::vector<Person> *dataPtr = &personArray;
+  if (!usePassByReference) {
+    localCopy = personArray;
+    dataPtr = &localCopy;
+  }
+  const std::vector<Person> &data = *dataPtr;
+
+  std::map<std::string, Person> oldestPersonPerCity;
+  for (const auto &person : data) {
     auto it = oldestPersonPerCity.find(person.currentCity);
 
-    if (it == oldestPersonPerCity.end() || person.assets > it->second.assets) {
+    if (it == oldestPersonPerCity.end() || person.age > it->second.age) {
       oldestPersonPerCity.insert_or_assign(person.currentCity, person);
     }
   }
@@ -34,17 +48,22 @@ QueryMaker::findOldestPersonPerCity(vector<Person> &personArray) {
 }
 
 Person
-QueryMaker::findHighestAssetsPersonCountryWide(vector<Person> &personArray) {
-  // get size
-  int n = personArray.size();
+QueryMaker::findHighestAssetsPersonCountryWide(std::vector<Person> &personArray,
+                                               bool usePassByReference) {
+  std::vector<Person> localCopy;
+  const std::vector<Person> *dataPtr = &personArray;
+  if (!usePassByReference) {
+    localCopy = personArray;
+    dataPtr = &localCopy;
+  }
+  const std::vector<Person> &data = *dataPtr;
 
-  Person PersonOfHighestAssets = personArray[0];
+  int n = data.size();
+  Person PersonOfHighestAssets = data[0];
 
   for (int i = 1; i < n; i++) {
-    if (personArray[i].assets > PersonOfHighestAssets.assets) {
-      PersonOfHighestAssets =
-          personArray[i]; // replace current person of highest assets with the
-                          // newfound person
+    if (data[i].assets > PersonOfHighestAssets.assets) {
+      PersonOfHighestAssets = data[i];
     }
   }
 
