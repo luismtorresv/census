@@ -24,6 +24,85 @@
 % ------------------------------
 % Main sections (as required)
 
+\section{Context and Approach}
+
+This project focuses on handling large datasets in C/C++ on Linux and evaluating
+how different design choices affect performance. The main objectives are:
+\begin{itemize}
+    \item Generate and process datasets with millions of records.
+    \item Compare using \textbf{values vs. pointers} to measure memory savings
+    and runtime performance.
+    \item Compare using \textbf{structs (C)} vs. \textbf{classes (C++)} to
+    examine efficiency and memory layout.
+    \item Record \textbf{execution time} and \textbf{memory usage} for each
+    query with a custom \texttt{monitor}.
+\end{itemize}
+
+Each record contains: full name, date of birth, city of residence, assets,
+debts, ID number, and the assigned tax calendar group (A/B/C) based on the last
+digits of the ID.
+
+\section{Queries}
+
+The required queries were:
+\begin{enumerate}
+    \item \textbf{Oldest person}
+    \begin{itemize}
+        \item Across the entire dataset.
+        \item Grouped by city.
+    \end{itemize}
+    \item \textbf{Person with the most assets}
+    \begin{itemize}
+        \item Overall.
+        \item By city.
+        \item By tax calendar group (A/B/C).
+    \end{itemize}
+    \item \textbf{Tax filers}
+    \begin{itemize}
+        \item Count people in each tax calendar group.
+        \item Validate assignment according to ID termination rules.
+    \end{itemize}
+\end{enumerate}
+
+Additional queries designed by the team:
+\begin{enumerate}
+    \item Cities with the highest average assets.
+    \item Percentage of people older than 80 in each tax group.
+    \item Number of people in each city.
+\end{enumerate}
+
+\section{How We Measured Performance}
+
+Two main configurations were tested:
+\begin{itemize}
+    \item \textbf{By value vs. by pointer:} storing full records directly
+    compared to storing only pointers to them.
+    \item \textbf{Struct vs. class:} using plain structs without constructors or
+    virtual methods compared to full C++ classes with methods.
+\end{itemize}
+
+Performance was measured through:
+\begin{itemize}
+    \item \textbf{Execution time} with \texttt{std::chrono}.
+    \item \textbf{Memory usage} (RSS in KB) from \texttt{/proc/self/statm}.
+    \item \textbf{Recorded statistics} saved by the \texttt{monitor}, summarized
+    in console and exported to CSV.
+\end{itemize}
+
+\section{Analysis}
+
+The results let us compare time and memory consumption across different
+approaches. Key points for analysis include:
+\begin{itemize}
+    \item The extent of memory savings when using pointers instead of values,
+    particularly with very large datasets.
+    \item Whether structs offer measurable cache benefits compared to classes.
+    \item How queries scale when the dataset grows beyond one million records.
+    \item Which queries are more costly in terms of performance, such as full
+    scans versus grouped lookups.
+\end{itemize}
+
+
 \section{Critical Thinking Questions}
 
 \subsection{Why do pointers reduce memory usage when dealing with 10 million records?}
