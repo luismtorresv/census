@@ -1,18 +1,25 @@
+#include "monitor.h"
 #include "person.hpp"
 #include "personFactory.hpp"
 #include "queryMaker.hpp"
 #include "record.hpp"
-#include <iostream>
 
-void mostrarMenu() {
+#include <iostream>
+#include <map>
+#include <string>
+#include <vector>
+
+void showMenu() {
   std::cout << "\n\n=== CENSUS ===";
-  std::cout << "\n0. Make new Dataset";
+  std::cout << "\n0. Create new dataset";
   std::cout << "\n1. Search for oldest person";
   std::cout << "\n2. Search for individual with the most assets";
-  std::cout << "\n3. Search for Tax Filer";
-  std::cout << "\n4. Additional Queries";
-  std::cout << "\n5. Exit";
-  std::cout << "\n Seleccione una opción: ";
+  std::cout << "\n3. Tax filer queries";
+  std::cout << "\n4. Additional queries";
+  std::cout << "\n5. Show performance statistics";
+  std::cout << "\n6. Export statistics to CSV";
+  std::cout << "\n7. Exit";
+  std::cout << "\nSelect an option: ";
 }
 
 void printHashMap(const std::map<std::string, Person> &personMap) {
@@ -37,190 +44,176 @@ std::string taxCalendarGroupToString(taxCalendarGroup group) {
 
 int main() {
   std::vector<Person> persons;
-  int option;
   PersonFactory factory;
   QueryMaker query;
+  Monitor monitor;
 
-  bool Pointers;
-  int checkReference;
-  std::cout << "Pointers(0) or Value(1)?";
-  std::cin >> checkReference;
-  Pointers = (checkReference == 0) ? true : false;
+  bool usePointers;
+  int referenceChoice;
+  std::cout << "Pointers (0) or Value (1)? ";
+  std::cin >> referenceChoice;
+  usePointers = (referenceChoice == 0);
 
+  int option;
   do {
-
-    mostrarMenu();
+    showMenu();
     std::cin >> option;
 
+    long memStart = monitor.getMemoryUsage();
+
     switch (option) {
-    case 0: {
+    case 0: { // Create dataset
       int n;
-      std::cout << "\nSet the size of the new array: ";
+      std::cout << "\nEnter dataset size: ";
       std::cin >> n;
 
       if (n <= 0) {
-        std::cout << "Don't use negative numbers!";
+        std::cout << "Dataset must contain at least 1 person.\n";
         break;
       }
 
-      // Record the time taken and memory used.
+      monitor.startTimer();
       persons = std::move(factory.generatePersonVector(n));
+      double t = monitor.stopTimer();
+      long mem = monitor.getMemoryUsage() - memStart;
 
-      std::cout << "\nArray of size " << n << " created!";
+      std::cout << "\nDataset of size " << n << " created in " << t
+                << " ms, Memory: " << mem << " KB\n";
+      monitor.record("Create dataset", t, mem);
+      monitor.showRecord("Create dataset", t, mem);
       break;
     }
 
-    case 1: {
-      int optionForOldest;
+    case 1: { // Oldest person
+      int choice;
+      std::cout << "\nSearch oldest person countrywide (0) or by city (1)? ";
+      std::cin >> choice;
 
-      std::cout
-          << "\n Search for oldest person countrywide (0) or by city (1)?";
-      std::cin >> optionForOldest;
-
-      switch (optionForOldest) {
-      case 0: {
-        Person oldestPerson =
-            query.findOldestPersonCountryWide(persons, Pointers);
-        std::cout << "The oldest person countrywide is " << oldestPerson.name
-                  << ". He is " << oldestPerson.age << " years old!";
-        break;
+      monitor.startTimer();
+      if (choice == 0) {
+        Person oldest = query.findOldestPersonCountryWide(persons, usePointers);
+        std::cout << "Oldest person: " << oldest.name << ", Age: " << oldest.age
+                  << "\n";
+      } else if (choice == 1) {
+        std::cout << "\nOldest individuals per city:\n";
+        printHashMap(query.findOldestPersonPerCity(persons, usePointers));
+      } else {
+        std::cout << "Invalid option.\n";
       }
-      case 1: {
-        std::cout << "\nThe oldest individuals per city are: \n";
-        printHashMap(query.findOldestPersonPerCity(persons, Pointers));
-        break;
-      }
-      default: {
-        std::cout << "choose either 0 or 1";
-        break;
-      }
-      }
+      double t = monitor.stopTimer();
+      long mem = monitor.getMemoryUsage() - memStart;
+      monitor.record("Find oldest person", t, mem);
+      monitor.showRecord("Find oldest person", t, mem);
       break;
     }
 
-    case 2: {
-      int optionForHighestAssets;
+    case 2: { // Highest assets
+      int choice;
+      std::cout << "\nFind richest person countrywide (0), by city (1), or by "
+                   "tax group (2)? ";
+      std::cin >> choice;
 
-      std::cout << "\n Search for the person with the highest assets "
-                   "countrywide (0), by city (1), or by tax group (2)?";
-      std::cin >> optionForHighestAssets;
-
-      switch (optionForHighestAssets) {
-      case 0: {
-        Person highestAssetIndividual =
-            query.findHighestAssetsPersonCountryWide(persons, Pointers);
-        std::cout << "The person with the highest assets countrywide is "
-                  << highestAssetIndividual.name << ". He has "
-                  << highestAssetIndividual.assets << " assets!";
-        break;
-      }
-      case 1: {
-        std::cout << "\nThe person with the highest assets per city are:  \n";
+      monitor.startTimer();
+      if (choice == 0) {
+        Person richest =
+            query.findHighestAssetsPersonCountryWide(persons, usePointers);
+        std::cout << "Richest person: " << richest.name
+                  << ", Assets: " << richest.assets << "\n";
+      } else if (choice == 1) {
+        std::cout << "\nRichest person per city:\n";
         printHashMap(query.findHighestAssetsPersonPerCity(persons));
-        break;
-      }
-
-      case 2: {
-        std::cout << "\nThe person with the highest assets per tax calendar "
-                     "group is:  \n";
-        std::map<taxCalendarGroup, Person> highestAssetIndividuals =
+      } else if (choice == 2) {
+        auto richestByGroup =
             query.findHighestAssetsPersonPerTaxCalendarGroup(persons);
-
-        for (const auto &[key, Person] : highestAssetIndividuals) {
-          std::cout << "\n" << taxCalendarGroupToString(key);
-          std::cout << "\nName: " << Person.name;
+        for (const auto &[grp, person] : richestByGroup) {
+          std::cout << taxCalendarGroupToString(grp) << " -> " << person.name
+                    << "\n";
         }
-
-        break;
+      } else {
+        std::cout << "Invalid option.\n";
       }
-      default: {
-        std::cout << "choose either 0 or 1";
-        break;
-      }
-      }
+      double t = monitor.stopTimer();
+      long mem = monitor.getMemoryUsage() - memStart;
+      monitor.record("Find highest assets", t, mem);
+      monitor.showRecord("Find highest assets", t, mem);
       break;
     }
-    case 3: {
-      int optionTaxFiler;
 
-      std::cout << "\n Choose one of the following Tax Filer quieries: Count "
-                   "the people per their tax group (0)";
-      std::cin >> optionTaxFiler;
+    case 3: { // Tax filer queries
+      int choice;
+      std::cout << "\nChoose: Count people per tax group (0): ";
+      std::cin >> choice;
 
-      switch (optionTaxFiler) {
-      case 0: {
-        std::cout << "Now displaying the amount of people per tax group: ";
-        std::map<taxCalendarGroup, int> peoplePerTaxGroup =
-            query.countPeoplePerTaxCalendarGroup(persons);
-
-        for (const auto &[key, count] : peoplePerTaxGroup) {
-          std::cout << "\n" << taxCalendarGroupToString(key);
-          std::cout << "\nCount: " << count;
+      monitor.startTimer();
+      if (choice == 0) {
+        auto counts = query.countPeoplePerTaxCalendarGroup(persons);
+        for (const auto &[grp, count] : counts) {
+          std::cout << taxCalendarGroupToString(grp) << " -> " << count << "\n";
         }
-
-        break;
+      } else {
+        std::cout << "Invalid option.\n";
       }
-      default: {
-        std::cout << "choose a valid number";
-        break;
-      } break;
-      }
-
+      double t = monitor.stopTimer();
+      long mem = monitor.getMemoryUsage() - memStart;
+      monitor.record("Tax filer queries", t, mem);
+      monitor.showRecord("Tax filer queries", t, mem);
       break;
     }
-    case 4: {
-      int optionAdditionalQ;
 
-      std::cout << "\n Choose one of the following additional queries: Average "
-                   "assets per city (0), Calculate the percentage of people "
-                   "older than 80 per tax calendar group (1), or view the "
-                   "amount of people per city (2)?";
-      std::cin >> optionAdditionalQ;
+    case 4: { // Additional queries
+      int choice;
+      std::cout << "\nChoose: Avg assets per city (0), % over 80 by tax group "
+                   "(1), Count per city (2): ";
+      std::cin >> choice;
 
-      switch (optionAdditionalQ) {
-      case 0: {
-        std::cout << "The cities with the highest average assets are: ";
-        const auto &CityAssetsPair =
-            query.findCitiesWithHighestAverageAssets(persons);
-
-        for (const auto &pair : CityAssetsPair) {
-          std::cout << "\nCity: " << pair.first;
-          std::cout << "\nAssets: " << pair.second;
+      monitor.startTimer();
+      if (choice == 0) {
+        auto avgAssets = query.findCitiesWithHighestAverageAssets(persons);
+        for (const auto &[city, avg] : avgAssets) {
+          std::cout << "City: " << city << " -> Avg assets: " << avg << "\n";
         }
-        break;
-      }
-      case 1: {
-        std::cout << "Calculate the percentage of people older than 80 per tax "
-                     "calendar group";
-        std::map<taxCalendarGroup, double> percentageOlderThan80 =
+      } else if (choice == 1) {
+        auto percentOver80 =
             query.calculatePercentageOfPeopleOlderThan80PerTaxCalendarGroup(
                 persons);
-
-        for (const auto &[key, amount] : percentageOlderThan80) {
-          std::cout << "\n" << taxCalendarGroupToString(key);
-          std::cout << "\n" << amount;
+        for (const auto &[grp, pct] : percentOver80) {
+          std::cout << taxCalendarGroupToString(grp) << " -> " << pct << "%\n";
         }
-        break;
-      }
-      case 2: {
-        std::cout << "Display the amount of people per city";
-        std::map<std::string, int> count = query.countPeoplePerCity(persons);
-
-        for (const auto &[key, amount] : count) {
-          std::cout << "City: " << key << "\n";
-          std::cout << "Number of people: " << amount << "\n";
+      } else if (choice == 2) {
+        auto countPerCity = query.countPeoplePerCity(persons);
+        for (const auto &[city, cnt] : countPerCity) {
+          std::cout << "City: " << city << " -> " << cnt << " people\n";
         }
-        break;
+      } else {
+        std::cout << "Invalid option.\n";
       }
-      default: {
-        std::cout << "choose either 0, 1 or 2";
-        break;
-      }
-      }
+      double t = monitor.stopTimer();
+      long mem = monitor.getMemoryUsage() - memStart;
+      monitor.record("Additional queries", t, mem);
+      monitor.showRecord("Additional queries", t, mem);
       break;
     }
+
+    case 5: { // Show performance
+      monitor.showSummary();
+      break;
     }
-  } while (option != 5);
+
+    case 6: { // Export stats
+      monitor.exportCSV();
+      break;
+    }
+
+    case 7:
+      std::cout << "Exiting...\n";
+      break;
+
+    default:
+      std::cout << "Invalid option.\n";
+      break;
+    }
+
+  } while (option != 7);
 
   return 0;
 }
