@@ -17,13 +17,79 @@
     \listoffigures
 \fi
 
-\listoftables
+% \listoftables
 
 \clearpage
 
 % ------------------------------
 % Main sections (as required)
-%
+
+\section{Critical Thinking Questions}
+
+\subsection{Why do pointers reduce memory usage when dealing with 10 million records?}
+
+Pointers reduce memory usage because they reference a shared memory location
+instead of duplicating entire data structures. In scenarios with millions of
+records, storing full copies of the same or large objects is inefficient. By
+storing pointers, only the address of the data (typically 4 or 8 bytes,
+depending on architecture) is maintained, avoiding redundant copies. This can
+drastically reduce memory consumption, though the actual savings depend on the
+structure size and whether the pointed-to data is reused.
+
+\subsection{If the Calendar depends on the person's ID, how can group searches be optimized?}
+
+If the calendar grouping is a deterministic function of the person’s ID, it is
+unnecessary to store the group explicitly for each record. Instead, one can
+precompute or derive the mapping function between the ID and the calendar group
+(e.g., an enumeration such as \texttt{CalendarTaxGroup}). By indexing or hashing
+IDs directly to their groups, searches can be optimized, reducing both memory
+overhead and lookup time.
+
+\subsection{How does memory access differ between an array of structs and a vector of class objects?}
+
+The distinction arises primarily from data layout and object semantics:
+
+\begin{itemize}
+    \item \textbf{Array of Structs (AoS):} Structs that are Plain Old Data (POD)
+    types—meaning no user-defined constructors, destructors, or virtual
+    functions—are stored contiguously in memory. This layout maximizes spatial
+    locality and cache efficiency, which is advantageous in data-oriented
+    design.
+    \item \textbf{Vector of Class Objects:} While \texttt{std::vector} also
+    stores elements contiguously, class objects often introduce overhead through
+    constructors, destructors, and possible virtual table pointers. This makes
+    them heavier than plain structs, potentially harming cache performance. If
+    the class holds pointers to heap-allocated members, memory access becomes
+    indirect and fragmented.
+\end{itemize}
+
+Thus, for performance-critical workloads requiring sequential traversal and
+predictable memory access, an AoS layout is typically more efficient.
+
+\subsection{How can \texttt{mmap} or virtual memory help when data exceeds
+physical RAM?}
+
+When datasets exceed available RAM, the operating system leverages virtual
+memory. Pages that cannot fit in RAM are stored in a swap area on disk, with the
+OS transparently paging them in and out. This allows programs to operate on data
+larger than physical memory, though with significant latency penalties due to
+disk access times.
+
+The \texttt{mmap} system call provides more direct control. It can:
+
+\begin{itemize}
+    \item Map files directly into memory space, enabling efficient I/O by
+    allowing the OS page cache to handle reads and writes.
+    \item Allocate large contiguous memory regions, bypassing some limitations
+    of \texttt{malloc}.
+    \item Enable shared memory between processes by mapping the same file or
+    anonymous memory region into multiple address spaces.
+\end{itemize}
+
+In high-volume data processing, combining virtual memory and \texttt{mmap} can
+allow applications to handle datasets that far exceed the machine’s physical
+memory capacity, though at the cost of higher latency for non-resident pages.
+
 
 % ------------------------------
 % Bibliography
