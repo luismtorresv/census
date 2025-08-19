@@ -41,7 +41,14 @@ int main() {
   PersonFactory factory;
   QueryMaker query;
 
+  bool Pointers;
+  int checkReference;
+  std::cout << "Pointers(0) or Value(1)?";
+  std::cin >> checkReference;
+  Pointers = (checkReference == 0) ? true : false;
+
   do {
+
     mostrarMenu();
     std::cin >> option;
 
@@ -72,14 +79,15 @@ int main() {
 
       switch (optionForOldest) {
       case 0: {
-        Person oldestPerson = query.findOldestPersonCountryWide(persons);
+        Person oldestPerson =
+            query.findOldestPersonCountryWide(persons, Pointers);
         std::cout << "The oldest person countrywide is " << oldestPerson.name
                   << ". He is " << oldestPerson.age << " years old!";
         break;
       }
       case 1: {
         std::cout << "\nThe oldest individuals per city are: \n";
-        printHashMap(query.findOldestPersonPerCity(persons));
+        printHashMap(query.findOldestPersonPerCity(persons, Pointers));
         break;
       }
       default: {
@@ -100,7 +108,7 @@ int main() {
       switch (optionForHighestAssets) {
       case 0: {
         Person highestAssetIndividual =
-            query.findHighestAssetsPersonCountryWide(persons);
+            query.findHighestAssetsPersonCountryWide(persons, Pointers);
         std::cout << "The person with the highest assets countrywide is "
                   << highestAssetIndividual.name << ". He has "
                   << highestAssetIndividual.assets << " assets!";
