@@ -19,6 +19,7 @@ public:
   std::map<std::string, Person>
   findHighestAssetsPersonPerCity(std::vector<Person> personArray);
   Person
+
   findHighestAssetsPersonPerTaxCalendarGroup(std::vector<Person> personArray);
   int countPeoplePerTaxCalendarGroup(std::vector<Person> personArray);
   void validateTaxCalendarGroup(

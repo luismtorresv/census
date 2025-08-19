@@ -53,10 +53,10 @@ string PersonFactory::generateRandomName() {
   // Generate a random number to input as position for vectors 'names' and
   // 'surnames'.
 
-  int random_name_pos = generateRandomNumber(0, names.size());
-  int random_surname_pos = generateRandomNumber(0, surnames.size());
+  int random_name_pos = generateRandomNumber(0, names.size() - 1);
+  int random_surname_pos = generateRandomNumber(0, surnames.size() - 1);
 
-  return names[random_name_pos] + surnames[random_surname_pos];
+  return names[random_name_pos] + " " + surnames[random_surname_pos];
 }
 
 year_month_day PersonFactory::generateRandomBirthDate() {
@@ -77,7 +77,7 @@ string PersonFactory::generateRandomCity() {
   };
 
   // Generate a random number to input as position for vector 'colombianCities'.
-  int random_cities_pos = generateRandomNumber(0, colombianCities.size());
+  int random_cities_pos = generateRandomNumber(0, colombianCities.size() - 1);
 
   return colombianCities[random_cities_pos];
 }
