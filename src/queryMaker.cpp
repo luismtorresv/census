@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Person QueryMaker::findOldestPersonCountryWide(vector<Person> personArray) {
+Person QueryMaker::findOldestPersonCountryWide(vector<Person> &personArray) {
 
   // get size
   int n = personArray.size();
@@ -20,7 +20,7 @@ Person QueryMaker::findOldestPersonCountryWide(vector<Person> personArray) {
 }
 
 std::map<string, Person>
-QueryMaker::findOldestPersonPerCity(vector<Person> personArray) {
+QueryMaker::findOldestPersonPerCity(vector<Person> &personArray) {
   std::map<string, Person> oldestPersonPerCity;
   for (const auto &person : personArray) {
     auto it = oldestPersonPerCity.find(person.currentCity);
@@ -34,7 +34,7 @@ QueryMaker::findOldestPersonPerCity(vector<Person> personArray) {
 }
 
 Person
-QueryMaker::findHighestAssetsPersonCountryWide(vector<Person> personArray) {
+QueryMaker::findHighestAssetsPersonCountryWide(vector<Person> &personArray) {
   // get size
   int n = personArray.size();
 
@@ -52,7 +52,7 @@ QueryMaker::findHighestAssetsPersonCountryWide(vector<Person> personArray) {
 }
 
 std::map<string, Person>
-QueryMaker::findHighestAssetsPersonPerCity(std::vector<Person> personArray) {
+QueryMaker::findHighestAssetsPersonPerCity(std::vector<Person> &personArray) {
   std::map<string, Person> highestAssetPersonPerCity;
 
   for (const auto &person : personArray) {

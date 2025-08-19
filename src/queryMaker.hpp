@@ -12,12 +12,12 @@
 class QueryMaker {
 
 public:
-  Person findOldestPersonCountryWide(std::vector<Person> personArray);
+  Person findOldestPersonCountryWide(std::vector<Person> &personArray);
   std::map<std::string, Person>
-  findOldestPersonPerCity(std::vector<Person> personArray);
-  Person findHighestAssetsPersonCountryWide(std::vector<Person> personArray);
+  findOldestPersonPerCity(std::vector<Person> &personArray);
+  Person findHighestAssetsPersonCountryWide(std::vector<Person> &personArray);
   std::map<std::string, Person>
-  findHighestAssetsPersonPerCity(std::vector<Person> personArray);
+  findHighestAssetsPersonPerCity(std::vector<Person> &personArray);
 
   std::map<taxCalendarGroup, Person>
   findHighestAssetsPersonPerTaxCalendarGroup(std::vector<Person> &personArray);
