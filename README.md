@@ -1,0 +1,3 @@
+# Vídeo de sustentación
+
+<https://eafit-my.sharepoint.com/:v:/g/personal/lmtorresv_eafit_edu_co/EaSondQEmFlHsPpD5yRSAj8BNd46j5dR1WSBOavL8Z__wA?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=RMUwpl>
