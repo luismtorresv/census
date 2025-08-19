@@ -18,13 +18,11 @@ public:
   Person findHighestAssetsPersonCountryWide(std::vector<Person> personArray);
   std::map<std::string, Person>
   findHighestAssetsPersonPerCity(std::vector<Person> personArray);
-  Person
 
-  findHighestAssetsPersonPerTaxCalendarGroup(std::vector<Person> personArray);
-  int countPeoplePerTaxCalendarGroup(std::vector<Person> personArray);
-  void validateTaxCalendarGroup(
-      std::vector<Person>
-          personArray); // I don't know what this function returns yet.
+  std::map<taxCalendarGroup, Person>
+  findHighestAssetsPersonPerTaxCalendarGroup(std::vector<Person> &personArray);
+  std::map<taxCalendarGroup, int>
+  countPeoplePerTaxCalendarGroup(std::vector<Person> &personArray);
 
   // Additional queries:
   // Return vector of pairs (city, average_assets) sorted desc by average.

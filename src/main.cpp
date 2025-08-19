@@ -113,20 +113,16 @@ int main() {
       }
 
       case 2: {
-        // std::cout << "\nThe person with the highest assets per tax calendar "
-        //              "group is:  \n";
-        // Person highestAssetIndividual =
-        //     query.findHighestAssetsPersonPerTaxCalendarGroup(persons);
-        // taxCalendarGroup taxGroup =
-        //     factory.determineTaxCalendarGroup(highestAssetIndividual.id);
+        std::cout << "\nThe person with the highest assets per tax calendar "
+                     "group is:  \n";
+        std::map<taxCalendarGroup, Person> highestAssetIndividuals =
+            query.findHighestAssetsPersonPerTaxCalendarGroup(persons);
 
-        // std::cout
-        //     << "The person with the highest assets per tax calendar group is
-        //     "
-        //     << highestAssetIndividual.name << ". He has "
-        //     << highestAssetIndividual.assets
-        //     << " assets, and belongs to the tax group "
-        //     << taxCalendarGroupToString(taxGroup);
+        for (const auto &[key, Person] : highestAssetIndividuals) {
+          std::cout << "\n" << taxCalendarGroupToString(key);
+          std::cout << "\nName: " << Person.name;
+        }
+
         break;
       }
       default: {
@@ -137,6 +133,31 @@ int main() {
       break;
     }
     case 3: {
+      int optionTaxFiler;
+
+      std::cout << "\n Choose one of the following Tax Filer quieries: Count "
+                   "the people per their tax group (0)";
+      std::cin >> optionTaxFiler;
+
+      switch (optionTaxFiler) {
+      case 0: {
+        std::cout << "Now displaying the amount of people per tax group: ";
+        std::map<taxCalendarGroup, int> peoplePerTaxGroup =
+            query.countPeoplePerTaxCalendarGroup(persons);
+
+        for (const auto &[key, count] : peoplePerTaxGroup) {
+          std::cout << "\n" << taxCalendarGroupToString(key);
+          std::cout << "\nCount: " << count;
+        }
+
+        break;
+      }
+      default: {
+        std::cout << "choose a valid number";
+        break;
+      } break;
+      }
+
       break;
     }
     case 4: {
@@ -168,7 +189,7 @@ int main() {
                 persons);
 
         for (const auto &[key, amount] : percentageOlderThan80) {
-          std::cout << "\n" << key; // TODO: needs fixing
+          std::cout << "\n" << taxCalendarGroupToString(key);
           std::cout << "\n" << amount;
         }
         break;

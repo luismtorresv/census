@@ -67,6 +67,41 @@ QueryMaker::findHighestAssetsPersonPerCity(std::vector<Person> personArray) {
   return highestAssetPersonPerCity;
 }
 
+std::map<taxCalendarGroup, Person>
+QueryMaker::findHighestAssetsPersonPerTaxCalendarGroup(
+    std::vector<Person> &personArray) {
+  std::map<taxCalendarGroup, Person> highestAssetPersonTaxCalendarGroup;
+  PersonFactory factory;
+  taxCalendarGroup taxGroup;
+
+  for (const auto &person : personArray) {
+    taxGroup = factory.determineTaxCalendarGroup(person.id);
+    auto it = highestAssetPersonTaxCalendarGroup.find(taxGroup);
+
+    if (it == highestAssetPersonTaxCalendarGroup.end() ||
+        person.assets > it->second.assets) {
+      highestAssetPersonTaxCalendarGroup.insert_or_assign(taxGroup, person);
+    }
+  }
+  return highestAssetPersonTaxCalendarGroup;
+}
+
+std::map<taxCalendarGroup, int>
+QueryMaker::countPeoplePerTaxCalendarGroup(std::vector<Person> &personArray) {
+  std::map<taxCalendarGroup, int> peoplePerGroup;
+  peoplePerGroup[taxCalendarGroup::groupA] = 0;
+  peoplePerGroup[taxCalendarGroup::groupB] = 0;
+  peoplePerGroup[taxCalendarGroup::groupC] = 0;
+  PersonFactory factory;
+
+  for (const auto &person : personArray) {
+    taxCalendarGroup taxGroup = factory.determineTaxCalendarGroup(person.id);
+    peoplePerGroup[taxGroup] += 1;
+  }
+
+  return peoplePerGroup;
+}
+
 vector<pair<string, double>> QueryMaker::findCitiesWithHighestAverageAssets(
     const vector<Person> &personArray, bool usePassByReference, size_t topK) {
 
