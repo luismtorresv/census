@@ -3,8 +3,12 @@
 #include <chrono>
 #include <string>
 
-class Person {
-
+#ifdef PERSON_AS_STRUCT
+struct
+#else
+class
+#endif
+    Person {
 public:
   // Personal information
   std::string name;
