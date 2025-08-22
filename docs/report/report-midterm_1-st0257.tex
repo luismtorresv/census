@@ -77,16 +77,17 @@ Two main configurations were tested:
 \begin{itemize}
     \item \textbf{By value vs. by pointer:} storing full records directly
     compared to storing only pointers to them.
-    \item \textbf{Struct vs. class:} using plain structs without constructors or
-    virtual methods compared to full C++ classes with methods.
+    \item \textbf{\texttt{struct} vs. \texttt{class}:} using plain structs
+    without constructors or virtual methods compared to full C++ classes with
+    methods.
 \end{itemize}
 
 Performance was measured through:
 \begin{itemize}
     \item \textbf{Execution time} with \texttt{std::chrono}.
     \item \textbf{Memory usage} (RSS in KB) from \texttt{/proc/self/statm}.
-    \item \textbf{Recorded statistics} saved by the \texttt{monitor}, summarized
-    in console and exported to CSV.
+    \item \textbf{Recorded statistics} saved by the \texttt{monitor} and
+    summarized in console.
 \end{itemize}
 
 \section{Analysis}
