@@ -250,6 +250,87 @@ In high-volume data processing, combining virtual memory and \texttt{mmap} can
 allow applications to handle datasets that far exceed the machine’s physical
 memory capacity, though at the cost of higher latency for non-resident pages.
 
+\section*{Addendum: \texttt{struct} vs. \texttt{class} in C++}
+
+In the context of C++, the distinction between \texttt{struct} and
+\texttt{class} is almost entirely syntactic. Both declare a class type, share
+the same object model, and support the same features (constructors, destructors,
+inheritance, templates, operator overloading, virtual functions, etc.).
+
+The only formal difference is the default access level:
+\begin{itemize}
+    \item In a \texttt{struct}, members and base classes are \textbf{public} by
+    default.
+    \item In a \texttt{class}, members and base classes are \textbf{private} by
+    default.
+\end{itemize}
+
+This is consistently stated across references:
+\begin{itemize}
+    \item Stroustrup (The Design and Evolution of C++): both keywords map to the
+    same underlying concept, introduced to allow a smooth transition from
+    C-style structures to fully featured C++ classes.
+    \item The C++ Programming Language (2013): a struct is a class with public
+    members by default.
+    \item Microsoft, IBM, Siemens documentation: same behavior, only default
+    visibility differs.
+    \item Stack Overflow discussions emphasize that the choice is purely
+    stylistic and has no impact on generated code.
+\end{itemize}
+
+In practice:
+\begin{itemize}
+    \item Many developers use \texttt{struct} for plain data aggregates (POD
+    types) without significant encapsulation.
+    \item \texttt{class} is often preferred for abstractions with private data
+    and member functions.
+\end{itemize}
+
+This conclusion is consistent across references including Stroustrup, Microsoft,
+IBM, Siemens, and Stack Overflow discussions. In practice, developers often use
+\texttt{struct} for plain aggregates (POD types) and \texttt{class} for
+abstractions with encapsulation, but the compiler treats them identically apart
+from default visibility.
+
+To confirm this, we compared the generated binaries of both versions of the
+program using \texttt{elf\_diff} (v0.7.1). The results show no significant
+differences:
+
+\begin{lstlisting}[caption={\texttt{elf\_diff} comparison of binaries built with \texttt{class} vs. \texttt{struct}}]
+Statistics of elf_diff comparison of files
+    old: build/census-class
+    new: build/census-struct
+
+Difference in resource consumption:
+    code:        0 bytes
+    text:        0 bytes
+    data:        0 bytes
+    static ram:  0 bytes
+    bss:         0 bytes
+
+Symbol statistics:
+    old:         1636
+    new:         1636
+    persisting:  1636
+    disappeared: 0
+    appeared:    0
+    similar:     0
+    migrated:    0
+
+No significant differences.
+\end{lstlisting}
+
+This confirms empirically that the choice between \texttt{struct} and
+\texttt{class} has no effect on the generated machine code or resource usage,
+supporting the claim that the distinction is purely about default visibility and
+coding style.
+
+For the experiments in this project, both forms compile down to the same
+representation and execution performance. Any differences observed in the
+results come from measurement noise, not from the keyword itself. What matters
+for performance is whether we use pointers or values, not whether the record is
+declared with \texttt{struct} or \texttt{class}.
+
 
 % ------------------------------
 % Bibliography
