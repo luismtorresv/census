@@ -146,7 +146,8 @@ int main() {
 
       monitor.startTimer();
       if (choice == 0) {
-        auto counts = query.countPeoplePerTaxCalendarGroup(persons);
+        auto counts =
+            query.countPeoplePerTaxCalendarGroup(persons, usePointers);
         for (const auto &[grp, count] : counts) {
           std::cout << taxCalendarGroupToString(grp) << " -> " << count << "\n";
         }

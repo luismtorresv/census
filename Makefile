@@ -35,6 +35,7 @@ CXXFLAGS += -Wpedantic
 CXXFLAGS += -Wunused
 CXXFLAGS += -Wunreachable-code
 CXXFLAGS += -g
+CXXFLAGS += -Wno-unused-variable
 
 # The -MMD and -MP flags together generate Makefiles for us!
 # These files will have .d instead of .o as the output.

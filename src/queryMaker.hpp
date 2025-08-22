@@ -30,7 +30,8 @@ public:
   findHighestAssetsPersonPerTaxCalendarGroup(std::vector<Person> &personArray);
 
   std::map<taxCalendarGroup, int>
-  countPeoplePerTaxCalendarGroup(std::vector<Person> &personArray);
+  countPeoplePerTaxCalendarGroup(std::vector<Person> &personArray,
+                                 bool usePassByReference = true);
 
   std::vector<std::pair<std::string, double>>
   findCitiesWithHighestAverageAssets(const std::vector<Person> &personArray,

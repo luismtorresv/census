@@ -106,14 +106,24 @@ QueryMaker::findHighestAssetsPersonPerTaxCalendarGroup(
 }
 
 std::map<taxCalendarGroup, int>
-QueryMaker::countPeoplePerTaxCalendarGroup(std::vector<Person> &personArray) {
+QueryMaker::countPeoplePerTaxCalendarGroup(std::vector<Person> &personArray,
+                                           bool usePassByReference) {
   std::map<taxCalendarGroup, int> peoplePerGroup;
+
+  std::vector<Person> localCopy;
+  const std::vector<Person> *dataPtr = &personArray;
+  if (!usePassByReference) {
+    localCopy = personArray;
+    dataPtr = &localCopy;
+  }
+  const std::vector<Person> &data = *dataPtr;
+
   peoplePerGroup[taxCalendarGroup::groupA] = 0;
   peoplePerGroup[taxCalendarGroup::groupB] = 0;
   peoplePerGroup[taxCalendarGroup::groupC] = 0;
   PersonFactory factory;
 
-  for (const auto &person : personArray) {
+  for (const auto &person : data) {
     taxCalendarGroup taxGroup = factory.determineTaxCalendarGroup(person.id);
     peoplePerGroup[taxGroup] += 1;
   }
