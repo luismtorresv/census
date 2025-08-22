@@ -92,106 +92,96 @@ Performance was measured through:
 
 \section{Analysis}
 
-The results let us compare time and memory consumption across different
-approaches. Key points for analysis include:
-\begin{itemize}
-    \item The extent of memory savings when using pointers instead of values,
-    particularly with very large datasets.
-    \item Whether structs offer measurable cache benefits compared to classes.
-    \item How queries scale when the dataset grows beyond one million records.
-    \item Which queries are more costly in terms of performance, such as full
-    scans versus grouped lookups.
-\end{itemize}
-
-\section{Preliminary Results}
-
-We collected measurements for dataset creation and several queries using two
-main distinctions:
+The results allow us to compare execution time and memory consumption across two
+main axes:
 \begin{enumerate}
-    \item \textbf{Values vs. Pointers} — how data is stored and accessed.
-    \item \textbf{Structs vs. Classes} — how records are defined in C/C++.
+    \item \textbf{Value vs. Pointer} --- how records are stored and accessed.
+    \item \textbf{\texttt{struct} vs. \texttt{class}} --- how records are
+    defined in C/C++.
 \end{enumerate}
 
-The metrics include execution time (milliseconds) and additional memory used
-(KB).
-
-\subsection{Dataset Creation}
-
-\begin{table}[h!]
-\centering
-\begin{tabular}{|l|c|c|}
-\hline
-\textbf{Configuration} & \textbf{Time (ms)} & \textbf{Memory (KB)} \\
-\hline
-Pointers & 1806.87 & 105200 \\
-Values   & 1843.18 & 105112 \\
-\hline
-\end{tabular}
-\caption{Time and memory for creating a dataset with 1,000,000 records}
-\end{table}
-
-At the dataset creation stage, the use of structs versus classes did not show a
-significant difference. Both approaches required roughly the same memory
-footprint and initialization time. The small variations are more related to
-pointer vs. value than to the record type.
-
-\subsection{Finding Oldest Person (by City)}
-
-\begin{table}[h!]
-\centering
-\begin{tabular}{|l|c|c|}
-\hline
-\textbf{Configuration} & \textbf{Time (ms)} & \textbf{Memory (KB)} \\
-\hline
-Pointers & 0.056 & 0 \\
-Values   & 703.745 & 6972 \\
-\hline
-\end{tabular}
-\caption{Performance of query: oldest person by city}
-\end{table}
-
-Here the gap is striking: with pointers the query is almost instantaneous, while
-with values it takes hundreds of milliseconds and uses noticeable extra memory.
-In this type of traversal, structs behave similarly to classes, but classes may
-add small overhead due to constructors and possible alignment padding. Still,
-the main bottleneck here is clearly value vs. pointer.
-
-\subsection{Finding Person with Highest Assets (by Tax Group)}
-
-\begin{table}[h!]
-\centering
-\begin{tabular}{|l|c|c|}
-\hline
-\textbf{Configuration} & \textbf{Time (ms)} & \textbf{Memory (KB)} \\
-\hline
-Values   & 92.256 & 0 \\
-Pointers & 0.003 & 0 \\
-\hline
-\end{tabular}
-\caption{Performance of query: highest assets by tax group}
-\end{table}
-
-In this aggregation query, using pointers again proved much faster. Memory
-impact was negligible in both cases. When comparing structs and classes, structs
-offer slightly better cache locality (plain old data layout), while classes
-bring organizational clarity at the cost of small construction overhead.
-
-\section{Notes on Early Observations}
-
+We ran four representative queries:
 \begin{itemize}
-    \item Dataset creation showed minimal differences across all approaches —
-    the choice between struct or class does not matter much here.
-    \item Query performance, however, is dominated by whether pointers or values
-    are used. Pointers give far superior execution times and avoid unnecessary
-    memory copies.
-    \item Structs generally help in memory layout and cache efficiency, but when
-    queries involve heavy scanning or grouping, the pointer vs. value decision
-    outweighs the struct vs. class effect.
+    \item Oldest person countrywide.
+    \item Person with highest assets overall.
+    \item Count people per tax calendar group.
+    \item Cities with the highest average assets (one additional query).
 \end{itemize}
 
-In summary, structs and classes perform similarly for bulk dataset creation, but
-pointers versus values make a dramatic difference when running queries on large
-datasets.
+Each query was executed under both storage modes (value and pointer) and with
+both record definitions (\texttt{struct} and \texttt{class}), for a total of 16
+comparisons.
+
+\subsection{\texttt{class}-based Records}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Query} & \textbf{Mode} & \textbf{Time (ms)} & \textbf{Memory (KB)} \\
+\hline
+Oldest person (countrywide) & Value   & 328.069 & 6948 \\
+                            & Pointer & 15.814  & 0    \\
+\hline
+Highest assets (overall)    & Value   & 328.628 & 6992 \\
+                            & Pointer & 15.567  & 0    \\
+\hline
+Count by tax group          & Value   & 417.419 & 6804 \\
+                            & Pointer & 99.432  & 0    \\
+\hline
+Average assets (cities)     & Value   & 151.271 & 0    \\
+                            & Pointer & 147.434 & 0    \\
+\hline
+\end{tabular}
+\caption{Performance of four queries using class-based records}
+\end{table}
+
+\subsection{\texttt{struct}-based Records}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Query} & \textbf{Mode} & \textbf{Time (ms)} & \textbf{Memory (KB)} \\
+\hline
+Oldest person (countrywide) & Value   & 294.506 & 7012 \\
+                            & Pointer & 12.566  & 0    \\
+\hline
+Highest assets (overall)    & Value   & 296.899 & 7040 \\
+                            & Pointer & 11.174  & 0    \\
+\hline
+Count by tax group          & Value   & 389.490 & 6952 \\
+                            & Pointer & 98.951  & 0    \\
+\hline
+Average assets (cities)     & Value   & 148.053 & 0    \\
+                            & Pointer & 143.120 & 0    \\
+\hline
+\end{tabular}
+\caption{Performance of four queries using \texttt{struct}-based records}
+\end{table}
+
+\subsection{Observations}
+
+\begin{itemize}
+    \item The biggest factor is still \textbf{pointer vs. value}. For both
+    \texttt{class} and \texttt{struct} definitions, pointer-based queries are
+    consistently faster and avoid additional memory allocations.
+    \item \textbf{Structs vs. classes} show similar numbers overall. Structs are
+    slightly faster in some queries (e.g., oldest person, highest assets), which
+    matches expectations due to simpler layout and no constructor overhead.
+    \item The additional query \textit{average assets per city} is relatively
+    balanced. Both value and pointer versions run in similar time because this
+    query is aggregation-heavy, not copy-heavy.
+    \item Memory usage with value storage is consistently higher (6–7 MB extra)
+    regardless of record type, while pointer storage incurs negligible extra
+    cost.
+\end{itemize}
+
+In summary, pointer-based datasets dominate in query performance for both
+\texttt{struct} and \texttt{class} records, while \texttt{struct} definitions
+offer a small advantage in raw execution time. The main tradeoff lies in code
+organization (classes) versus raw efficiency (structs).
+
 
 
 \section{Critical Thinking Questions}
