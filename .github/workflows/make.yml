@@ -1,6 +1,12 @@
 name: Compile C++ project
 
-on: [push]
+on:
+  push:
+    paths-ignore:
+      - '/.github'
+      - '/docs'
+      - 'compile_commands.json'
+      - 'README.md'
 
 jobs:
  build:
